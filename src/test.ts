@@ -13,16 +13,18 @@ function main (): number {
 
 main()
 `
-
+console.log('This is test.ts file')
 const result = transpile(code, {
   transformers: {
     before: [
       context => (node: ts.SourceFile) => {
+        console.log('ts source:', node.fileName)
         return visitNodes(node, context, node => {
           if (ts.isFunctionDeclaration(node)) {
             const useLogger = !!ts.getJSDocTags(node).find(tag => {
               return tag.tagName.escapedText === 'noexcept'
             })
+            console.log('useLogger:', useLogger)
             if (useLogger) {
               return ts.factory.createFunctionDeclaration(
                 node.decorators,
